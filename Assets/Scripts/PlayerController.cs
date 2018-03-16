@@ -8,18 +8,19 @@ public class PlayerController : MonoBehaviour
 	public float maximumAngularSpeed = 50f;
 	public float maximumSpeed = 10f;
 	public float rotationFactor = 25f;
-	public float fireRate = 0.5f;
+	public float fireRate = 0.001f;
 
 	public GameObject shot;  
 	public Transform shotSpawn;
 	public GameObject explosion;
+	public GameObject shipExplosion;
 
 	private Rigidbody rb;
 	private string horizontalAxis;
 	private string verticalAxis;
 	private string fireButton;
 	private float timeWhenItCanFireAgain;
-	private int health = 5;
+	private int health = 150;
 
 	void Start() 
 	{
@@ -61,8 +62,8 @@ public class PlayerController : MonoBehaviour
 		health = health - 1;
 		if (health < 1) {
 			Destroy(gameObject);
-//			GameObject explosionAnimation = (GameObject)Instantiate(explosion, transform.position, transform.rotation);
-//			Destroy(explosionAnimation.gameObject, 1.1f);
+			GameObject explosionAnimation = (GameObject)Instantiate(shipExplosion, transform.position, transform.rotation);
+			Destroy(explosionAnimation.gameObject, 1.1f);
 		}
 	}
 
