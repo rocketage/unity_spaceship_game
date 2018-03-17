@@ -22,10 +22,13 @@ public class PlayerController : MonoBehaviour
 	private float timeWhenItCanFireAgain;
 	private int health = 150;
 
+	private GameController gameController;
+
 	void Start() 
 	{
+		LocateGameController();
 		rb = GetComponent<Rigidbody> ();
-		if (name == "Player1") {
+		if (CompareTag("Player1")) {
 			horizontalAxis = "Horizontal";
 			verticalAxis = "Vertical";
 			fireButton = "Fire1";
@@ -55,6 +58,12 @@ public class PlayerController : MonoBehaviour
 	{
 		HandleBoltImpact (collision);
 		HandleHealth (collision);
+
+		if (CompareTag ("Player1")) {
+			gameController.IncreasePlayer2Score (10);
+		} else {
+			gameController.IncreasePlayer1Score (10);
+		}
 	}
 
 	private void HandleHealth(Collision collision)
@@ -129,4 +138,16 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	private void LocateGameController()
+	{
+		GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+
+		if (gameControllerObject != null) {
+			gameController = gameControllerObject.GetComponent<GameController> ();
+		}
+
+		if (gameController == null) {
+			Debug.Log ("Cannot find 'GameController' script");
+		}  
+	}
 }
