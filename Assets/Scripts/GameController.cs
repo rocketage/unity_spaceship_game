@@ -48,15 +48,15 @@ public class GameController : MonoBehaviour
 		UpdatePlayer2Stats();
 	}
 
-	public void UpdatePlayer1Health(int delta)
+	public void UpdatePlayer1Health(int health)
 	{
-		player1Health += delta;
+		player1Health = health;
 		UpdatePlayer1Stats();
 	}
 
-	public void UpdatePlayer2Health(int delta)
+	public void UpdatePlayer2Health(int health)
 	{
-		player2Health += delta;
+		player2Health = health;
 		UpdatePlayer2Stats();
 	}
 

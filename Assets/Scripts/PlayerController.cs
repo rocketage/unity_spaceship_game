@@ -74,6 +74,12 @@ public class PlayerController : MonoBehaviour
 			GameObject explosionAnimation = (GameObject)Instantiate(shipExplosion, transform.position, transform.rotation);
 			Destroy(explosionAnimation.gameObject, 1.1f);
 		}
+
+		if (CompareTag ("Player1")) {
+			gameController.UpdatePlayer1Health (health);
+		} else {
+			gameController.UpdatePlayer2Health (health);
+		}
 	}
 
 	private void HandleBoltImpact(Collision collision)
