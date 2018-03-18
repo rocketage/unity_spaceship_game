@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
 	public GameObject player2Prefab;  
 	public Text player1ScoreText;
 	public Text player2ScoreText;
+	public AudioClip destroySound;
 
 	private GameObject player1;
 	private GameObject player2;
@@ -16,6 +17,13 @@ public class GameController : MonoBehaviour
 	private int player1Health;
 	private int player2Score;
 	private int player2Health;
+
+	private AudioSource audioSource;
+
+	void Awake () 
+	{
+		audioSource = GetComponent<AudioSource>();
+	}
 
 	// Use this for initialization
 	void Start () 
@@ -58,6 +66,12 @@ public class GameController : MonoBehaviour
 	{
 		player2Health = health;
 		UpdatePlayer2Stats();
+	}
+
+	public void DestroySound()
+	{
+		audioSource.pitch = Random.Range (0.5f, 1.5f);
+		audioSource.PlayOneShot(destroySound, Random.Range (0.8f, 1.0f));
 	}
 
 	void UpdatePlayer1Stats()

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotController : MonoBehaviour {
-
+public class ShotController : MonoBehaviour 
+{
 	public float speed = 10f;
 
 	void Start () {
@@ -11,5 +11,4 @@ public class ShotController : MonoBehaviour {
 		rb.velocity = transform.forward * speed;
 		Destroy (gameObject, 2.0f);
 	}
-
 }

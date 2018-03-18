@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
 	public Transform shotSpawn;
 	public GameObject explosion;
 	public GameObject shipExplosion;
+	public AudioClip shootSound;
+	public AudioClip damageSound;
 
 	private Rigidbody rb;
 	private string horizontalAxis;
@@ -23,10 +25,16 @@ public class PlayerController : MonoBehaviour
 	private int health = 150;
 
 	private GameController gameController;
+	private AudioSource audioSource;
+
+	void Awake () 
+	{
+		audioSource = GetComponent<AudioSource>();
+		LocateGameController();
+	}
 
 	void Start() 
 	{
-		LocateGameController();
 		rb = GetComponent<Rigidbody> ();
 		if (CompareTag("Player1")) {
 			horizontalAxis = "Horizontal";
@@ -51,6 +59,7 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetButton (fireButton) && Time.time > timeWhenItCanFireAgain) {
 			timeWhenItCanFireAgain = Time.time + fireRate;
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+			ShotSound ();
 		}
 	} 
 
@@ -58,6 +67,7 @@ public class PlayerController : MonoBehaviour
 	{
 		HandleBoltImpact (collision);
 		HandleHealth (collision);
+		DamageSound ();
 
 		if (CompareTag ("Player1")) {
 			gameController.IncreasePlayer2Score (10);
@@ -66,10 +76,23 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	private void DamageSound()
+	{
+		audioSource.pitch = Random.Range (0.5f, 1.5f);
+		audioSource.PlayOneShot(damageSound, Random.Range (0.5f, 0.7f));
+	}
+
+	private void ShotSound()
+	{
+		audioSource.pitch = Random.Range (0.5f, 1.5f);
+		audioSource.PlayOneShot(shootSound, Random.Range (0.4f, 0.6f));
+	}
+
 	private void HandleHealth(Collision collision)
 	{
 		health = health - 1;
 		if (health < 1) {
+			gameController.DestroySound ();
 			Destroy(gameObject);
 			GameObject explosionAnimation = (GameObject)Instantiate(shipExplosion, transform.position, transform.rotation);
 			Destroy(explosionAnimation.gameObject, 1.1f);
