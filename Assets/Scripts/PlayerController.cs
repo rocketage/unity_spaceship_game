@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 	private string fireButton;
 	private float timeWhenItCanFireAgain;
 	private int health = 150;
+	private int playerId;
 
 	private GameController gameController;
 	private AudioSource audioSource;
@@ -40,10 +41,12 @@ public class PlayerController : MonoBehaviour
 			horizontalAxis = "Horizontal";
 			verticalAxis = "Vertical";
 			fireButton = "Fire1";
+			playerId = 1;
 		} else {
 			horizontalAxis = "HorizontalP2";
 			verticalAxis = "VerticalP2";
 			fireButton = "Fire2";
+			playerId = 2;
 		}
 	}
 
@@ -91,8 +94,8 @@ public class PlayerController : MonoBehaviour
 	private void HandleHealth(Collision collision)
 	{
 		health = health - 1;
-		if (health < 1) {
-			gameController.DestroySound ();
+		if (health == 0) {
+			gameController.PlayerDestroyed (playerId);
 			Destroy(gameObject);
 			GameObject explosionAnimation = (GameObject)Instantiate(shipExplosion, transform.position, transform.rotation);
 			Destroy(explosionAnimation.gameObject, 1.1f);

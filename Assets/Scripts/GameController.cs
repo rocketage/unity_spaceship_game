@@ -10,13 +10,21 @@ public class GameController : MonoBehaviour
 	public Text player1ScoreText;
 	public Text player2ScoreText;
 	public AudioClip destroySound;
+	public float respawnTime = 1.2f;
 
 	private GameObject player1;
 	private GameObject player2;
 	private int player1Score;
 	private int player1Health;
+	private int player1GamesWon;
+	private bool player1ShouldRespawn;
+	private float player1RespawnTime;
+
 	private int player2Score;
 	private int player2Health;
+	private int player2GamesWon;
+	private bool player2ShouldRespawn;
+	private float player2RespawnTime;
 
 	private AudioSource audioSource;
 
@@ -28,12 +36,11 @@ public class GameController : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		player1 = (GameObject)Instantiate(player1Prefab, new Vector3(-2, 0 , 0), Quaternion.identity);
-		player2 = (GameObject)Instantiate(player2Prefab, new Vector3(2, 0, 0), Quaternion.identity);
-		player1Score = 0;
-		player2Score = 0;
-		player1Health = 150;
-		player2Health = 150;
+		player1ShouldRespawn = player2ShouldRespawn = true;
+		player2RespawnTime = player2RespawnTime = Time.time;
+		player1Score = player2Score = 0;
+		player1Health = player2Health = 150;
+		player1GamesWon = player2GamesWon = 0;
 		UpdatePlayer1Stats();
 		UpdatePlayer2Stats();
 	}
@@ -41,7 +48,15 @@ public class GameController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		
+		if (player1ShouldRespawn && (Time.time > player1RespawnTime)) {
+			player1ShouldRespawn = false;
+			player1 = (GameObject)Instantiate(player1Prefab, new Vector3(-4, 0 , 0), Quaternion.identity);
+		}
+
+		if (player2ShouldRespawn && (Time.time > player2RespawnTime)) {
+			player2ShouldRespawn = false;
+			player2 = (GameObject)Instantiate(player2Prefab, new Vector3(4, 0, 0), Quaternion.identity);
+		}
 	}
 
 	public void IncreasePlayer1Score(int delta)
@@ -68,7 +83,24 @@ public class GameController : MonoBehaviour
 		UpdatePlayer2Stats();
 	}
 
-	public void DestroySound()
+	public void PlayerDestroyed(int playerId)
+	{
+		if (playerId == 1) {
+			player1ShouldRespawn = true;
+			player1RespawnTime = Time.time + respawnTime;
+			player2GamesWon += 1;
+			UpdatePlayer2Stats ();			
+		} else {
+			player2ShouldRespawn = true;
+			player2RespawnTime = Time.time + respawnTime;
+			player1GamesWon += 1;
+			UpdatePlayer1Stats ();
+		}
+
+		DestroySound ();
+	}
+
+	private void DestroySound()
 	{
 		audioSource.pitch = Random.Range (0.5f, 1.5f);
 		audioSource.PlayOneShot(destroySound, Random.Range (0.8f, 1.0f));
@@ -77,18 +109,20 @@ public class GameController : MonoBehaviour
 	void UpdatePlayer1Stats()
 	{
 		player1ScoreText.text = string.Format(
-			"P1 Score:{0} Health:{1}", 
+			"P1 Score:{0} Health:{1} Won:{2}", 
 			Format(player1Score, 6),
-			Format(player1Health, 2)
+			Format(player1Health, 2),
+			player1GamesWon
 		);
 	}
 		
 	void UpdatePlayer2Stats()
 	{
 		player2ScoreText.text = string.Format(
-			"P2 Score:{0} Health:{1}", 
+			"P2 Score:{0} Health:{1} Won:{2}", 
 			Format(player2Score, 6),
-			Format(player2Health, 2)
+			Format(player2Health, 2),
+			player2GamesWon
 		);
 	}
 
