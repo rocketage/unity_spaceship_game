@@ -51,11 +51,13 @@ public class GameController : MonoBehaviour
 		if (player1ShouldRespawn && (Time.time > player1RespawnTime)) {
 			player1ShouldRespawn = false;
 			player1 = (GameObject)Instantiate(player1Prefab, new Vector3(-4, 0 , 0), Quaternion.identity);
+			UpdatePlayer1Stats();
 		}
 
 		if (player2ShouldRespawn && (Time.time > player2RespawnTime)) {
 			player2ShouldRespawn = false;
 			player2 = (GameObject)Instantiate(player2Prefab, new Vector3(4, 0, 0), Quaternion.identity);
+			UpdatePlayer2Stats();
 		}
 	}
 
@@ -89,13 +91,14 @@ public class GameController : MonoBehaviour
 			player1ShouldRespawn = true;
 			player1RespawnTime = Time.time + respawnTime;
 			player2GamesWon += 1;
-			UpdatePlayer2Stats ();			
 		} else {
 			player2ShouldRespawn = true;
 			player2RespawnTime = Time.time + respawnTime;
 			player1GamesWon += 1;
-			UpdatePlayer1Stats ();
 		}
+
+		UpdatePlayer1Stats ();
+		UpdatePlayer2Stats ();			
 
 		DestroySound ();
 	}
