@@ -148,13 +148,13 @@ public class PlayerController : MonoBehaviour
 
 	private void ClampPosition() 
 	{
-		rb.position = new Vector3(Mathf.Clamp(rb.position.x, -12f, 12f), 0.0f, Mathf.Clamp(rb.position.z, -9f, 9f));
+		rb.position = new Vector3(Mathf.Clamp(rb.position.x, -16f, 16f), 0.0f, Mathf.Clamp(rb.position.z, -9.5f, 9.5f));
 	}
 
 	private void BumpAgainstEdges() 
 	{
-		if (transform.position.z > 9f || transform.position.z < -9f ||
-			transform.position.x > 12f || transform.position.x < -12f) {
+		if (transform.position.z > 9.5f || transform.position.z < -9.5f ||
+			transform.position.x > 16f || transform.position.x < -16f) {
 			rb.velocity *= -1f;
 		}
 	}
